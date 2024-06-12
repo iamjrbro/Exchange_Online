@@ -1,1 +1,29 @@
-https://learn.microsoft.com/en-us/exchange/recipients-in-exchange-online/manage-distribution-groups/manage-distribution-groups
+Microsoft used to allow the upgrade of Distribution Lists to Microsoft 365 Groups by sending an email to the owner(s) of the eligible Distribution List from the Exchange admin center, as documented in the learning published in March 2024:
+
+https://learn.microsoft.com/en-us/exchange/recipients-in-exchange-online/manage-distribution-groups/upgrade-distribution-lists
+
+However, it is no longer possible to upgrade Distribution Lists in this manner. As Microsoft 365 Groups is now a mature feature, the ability to migrate DLs to Groups was deprecated on February 1, 2023.
+
+Now, the upgrade process is detailed in the following link:
+
+https://techcommunity.microsoft.com/t5/exchange-team-blog/deprecating-conversion-of-distribution-lists-to-microsoft-365/ba-p/3668215
+Notes:
+
+If the Distribution List is nested (has child groups or is a member of another group), you won't be able to add it as a member through the CSV file.
+
+
+
+
+
+A Microsoft costumava permitir a atualização de Listas de Distribuição para Grupos do Microsoft 365 enviando um email para o(s) proprietário(s) da Lista de Distribuição elegível a partir do centro de administração do Exchange, conforme documentado no aprendizado publicado em março de 2024:
+
+https://learn.microsoft.com/pt-br/exchange/recipients-in-exchange-online/manage-distribution-groups/upgrade-distribution-lists
+
+No entanto, não é mais possível atualizar Listas de Distribuição dessa maneira. Como os Grupos do Microsoft 365 agora são um recurso maduro, a capacidade de migrar DLs para Grupos foi descontinuada em 1º de fevereiro de 2023.
+
+Agora, o processo de atualização é detalhado no seguinte link:
+
+https://techcommunity.microsoft.com/t5/exchange-team-blog/deprecating-conversion-of-distribution-lists-to-microsoft-365/ba-p/3668215
+Notas:
+
+Se a Lista de Distribuição for aninhada (tiver grupos filhos ou for membro de outro grupo), você não poderá adicioná-la como membro através do arquivo CSV.
