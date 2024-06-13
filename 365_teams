@@ -1,0 +1,4 @@
+Grupos do 365 proporcionam a associação entre aplicativos no Microsoft 365, sendo um objeto no Microsoft Entra ID com uma lista de membros e um acoplamento a cargas de trabalho relacionadas, incluindo um site de equipe do SharePoint, caixa de correio compartilhada do Exchange, Planner e OneNote. 
+Tal permite adicionar ou remover pessoas ao grupo da mesma forma que faria com qualquer outro objeto de segurança baseado em grupo no Active Directory.
+https://learn.microsoft.com/pt-br/microsoftteams/office-365-groups
+https://learn.microsoft.com/en-us/microsoftteams/office-365-groups
