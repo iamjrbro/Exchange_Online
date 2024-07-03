@@ -1,0 +1,37 @@
+-> antes, gerar um csv com os logins dos usuarios desativados dos ultimos 90 dias (ou prazo da ultima execução)
+ 
+
+# Instale o módulo AzureAD se ainda não estiver instalado
+# Install-Module -Name AzureAD
+ 
+# Conecte-se ao Azure AD com credenciais administrativas
+Connect-AzureAD
+ 
+# Leia o arquivo CSV com os logins. Certifique-se de que o CSV tem uma coluna 'Login' com os UPNs dos usuários.
+$usuarios = Import-Csv -Path "c:\scripts\logins_desativados.csv"
+ 
+# Para cada login no arquivo CSV, remova os grupos associados
+foreach ($usuario in $usuarios) {
+    # Obtenha o usuário do Azure AD
+    $user = Get-AzureADUser -Filter "UserPrincipalName eq '$($usuario.Login)'"
+ 
+    # Verifique se o usuário foi encontrado
+    if ($user) {
+        # Obtenha todos os grupos dos quais o usuário é membro
+        $grupos = Get-AzureADUserMembership -ObjectId $user.ObjectId
+ 
+        # Verifique se o usuário é membro de algum grupo
+        if ($grupos) {
+            # Remova o usuário de cada grupo
+            foreach ($grupo in $grupos) {
+                Remove-AzureADGroupMember -ObjectId $grupo.ObjectId -MemberId $user.ObjectId
+            }
+        }
+        else {
+            Write-Host "Nenhum grupo encontrado para o usuário $($usuario.Login)."
+        }
+    }
+    else {
+        Write-Host "Usuário $($usuario.Login) não encontrado no Azure AD."
+    }
+}
