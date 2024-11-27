@@ -1,0 +1,3 @@
+#replace <zone_name> for your zone name and <resource_group_name> for your Resource Group name
+
+az network dns record-set list --zone-name <zone_name> --resource-group <resource_group_name>
