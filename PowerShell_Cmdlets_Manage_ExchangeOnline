@@ -1,0 +1,131 @@
+1. Connect to Exchange Online PowerShell
+To manage Exchange Online environment through PowerShell, you need to create a PowerShell session using the below cmdlet.
+
+PowerShell
+
+Connect-ExchangeOnline
+
+The above cmdlet allows you to connect to Exchange Online PowerShell with both MFA and non-MFA accounts. You can also connect to EXO PowerShell using certificates.
+Note: Try the PowerShell script to connect multiple Microsoft 365 services with ease.
+
+2. Exchange Mailbox Report: 
+Mailbox is a basic component of Exchange Online. To view mailboxes in your organization, run the Get-ExoMailbox cmdlet as shown below.
+
+PowerShell
+
+Get-ExoMailbox -ResultSize Unlimited
+
+Alternatively, you may also use the Get-Mailbox cmdlet.
+
+3. Get Exchange Online Mailbox Size
+
+Monitoring mailbox size helps you to increase the mailbox storage limit at the right time.
+To view the used size of the mailbox, run Get-MailboxStatistics or Get-ExoMailboxStatistics cmdlet.
+
+PowerShell
+
+Get-ExoMailboxStatistics -Identity admin |select DisplayName,TotalItemSize
+
+If you want to get all the mailboxes’ size, combine both Get-Mailbox and Get-MailboxStatistics cmdlet as shown below:
+
+PowerShell
+Get-Mailbox -ResultSize Unlimited | Get-MailboxStatistics | select DisplayName,TotalItemSize
+
+The above example displays the mailboxes’ size as shown in the following screenshot.
+
+4. Get Archive Mailbox in Exchange Online
+
+Archiving offers an additional mailbox to the user’s primary mailbox. So, the admin can enable archiving to the mailbox when it requires more storage.
+To get archive enabled mailboxes,
+
+PowerShell
+
+Get-Mailbox –ResultSize Unlimited –Archive
+
+To view archive mailboxes size,
+
+PowerShell
+
+Get-Mailbox –ResultSize Unlimited –Archive | Get-MailboxStatistics| Select DisplayName,TotalItemSize
+
+To know more about archive mailboxes’ size, status, and quota, run our PowerShell script to generate an archive mailbox size report. Also, the script provides information about auto-expanding archive status.
+
+5. Get Mailbox Quota Information
+Mailbox storage quota helps you to manage mailbox size and database growth. Once the mailbox reaches its quota, certain actions like sending emails, receiving emails are restricted. So, the admins need to keep an eye on the mailbox quota.
+To view the quota of a specific mailbox,
+
+PowerShell
+
+Get-Mailbox -Identity John@contoso.com | select *quota*
+
+This will list John’s quota information such as Prohibit Send Quota, Prohibit Send Receive Quota, Issue warning Quota, Archive Quota, etc.
+
+6. List Shared Mailboxes
+A shared mailbox is a type of user mailbox, but users can’t directly login to it by using a username and Password. To access the shared mailbox, users must have certain permissions such as full access, send as, and send on behalf on the shared mailbox.
+
+To list shared mailboxes in your organization, use the RecipientTypeDetails filter with the value SharedMailbox.
+
+PowerShell
+
+Get-ExoMailbox –ResultSize Unlimited –RecipientTypeDetails SharedMailbox
+
+To view users’ permission on the shared mailboxes, you can use our pre-built script to generate the shared mailbox permission report.
+
+7. Get Mailbox Permission Report
+Like shared mailbox, user mailbox also can be delegated with full access, send as, and send on behalf permissions. To identify users with each permission, execute the following cmdlets.
+To get users with Full Access permission on mailboxes,
+
+PowerShell
+
+Get-Mailbox | foreach {
+(Get-MailboxPermission -Identity $_.userprincipalname | where{ ($_.AccessRights -contains "FullAccess") -and ($_.IsInherited -eq $false) -and -not ($_.User -match "NT AUTHORITY") }) | select Identity,AccessRights,User}
+
+To get users with Send-as permission,
+
+PowerShell
+
+Get-Mailbox | foreach {
+(Get-RecipientPermission -Identity $_.userprincipalname | where{ -not (($_.Trustee -match "NT AUTHORITY") -or ($_.Trustee -match "S-1-5-21"))}) | select Identity,trustee}
+
+To get mailboxes with Send-on-behalf permission,
+
+PowerShell
+
+Get-Mailbox –ResultSize Unlimited | Where {$_.GrantSendOnBehalfTo -ne $null} | Select UserprincipalName,GrantSendOnBehalfTo
+
+8. Identify Inactive Mailboxes: 
+Inactive mailboxes can be identified by using the mailbox’s last logon time or last activity time.
+The Get-MailboxStatistics cmdlet helps you to get mailboxes’ last logon time and last activity time.
+
+PowerShell
+
+Get-Mailbox -ResultSize Unlimited |Foreach{
+Get-MailboxStatistics -Identity $_.UserPrincipalName | Select DisplayName,LastLogonTime,LastUserActionTime}
+
+9. Get Mailbox Forwarding Using PowerShell 
+Email forwarding configuration allows admins/users to forward email from the mailbox to another mailbox automatically.
+To list mailboxes configured with automatic email forwarding,
+
+PowerShell
+
+Get-mailbox -ResultSize Unlimited| where {$_.ForwardingAddress -ne $Null} | select DisplayName,ForwardingAddress
+
+The above cmdlet lists mailboxes in which email forwarding is configured through ForwardingAddress.
+Email forwarding can be configured in many ways, such as through configuring inbox rules, Forwarding Address, Redirect To, Forwarding SMTP address, etc. To get a consolidated report on all email forwarding configurations, you can use PowerShell.
+Tip: It’s important to identify external email forwarding, as it poses a major security risk. Regularly review your organization’s configuration and block external forwarding based on your security requirements.
+
+10. Get Mailbox Folder Permission
+When you don’t want to delegate the entire mailbox, use the ‘folder permission’ feature to grant access to a specific folder only.
+To view folders available in the mailbox, run the Get-MailboxFolder along with the mailbox’s identity.
+
+PowerShell
+
+Get-MailboxFolder -Identity admin@contoso.com -GetChildren
+
+To view assigned permission on a specific mailbox folder, use the Get-MailboxFolderPermission cmdlet as follows:
+
+PowerShell
+
+Get-MailboxFolderPermission -Identity admin@contoso.com:\To me
+
+The above example returns the list of user permissions for the ‘To me’ folder in admin’s mailbox.
